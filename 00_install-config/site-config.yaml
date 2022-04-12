@@ -1,0 +1,77 @@
+apiVersion: kni.akraino.org/v1alpha1
+kind: SiteConfig
+metadata:
+  name: notImportantHere
+config:
+  virtualizedInstall: "true"
+  releaseImageOverride: registry.svc.ci.openshift.org/origin/release:4.5
+provisioningInfrastructure:
+  hosts:
+    # interface to use for provisioning on the masters
+    masterBootInterface: ens224
+    # interface to use for provisioning on the workers
+    workerBootInterface: ens224
+    # interface to use for baremetal on the masters
+    masterSdnInterface: ens256
+    # interface to use for baremetal on the workers
+    workerSdnInterface: ens256
+
+  network:
+    # The provisioning network's CIDR
+    provisioningIpCidr: 172.22.0.0/24
+    # PXE boot server IP
+    # DHCP range start (usually provHost/interfaces/provisioningIpAddress + 1)
+    provisioningDHCPStart: 172.22.0.11
+    provisioningDHCPEnd: 172.22.0.51
+
+    # The baremetal networks's CIDR
+    baremetalIpCidr: 192.168.100.0/24
+    # Address map
+    bootstrap: baremetalDHCPStart
+    master-0: baremetalDHCPStart+1
+    master-1: baremetalDHCPStart+2
+    master-2: baremetalDHCPStart+3
+    worker-0: baremetalDHCPStart+5
+    worker-1: baremetalDHCPStart+6
+    worker-2: baremetalDHCPStart+7
+    baremetalDHCPStart: 192.168.100.11
+    baremetalDHCPEnd: 192.168.100.20
+    # baremetal network default gateway, set to proper IP if /provHost/services/baremetalGateway == false
+    # if /provHost/services/baremetalGateway == true, baremetalGWIP with be located on provHost/interfaces/baremetal
+    # and external traffic will be routed through the provisioning host
+
+    # baremetalGateway set to false
+    baremetalGWIP: 192.168.100.1
+    dns:
+      # cluster DNS, change to proper IP address if provHost/services/clusterDNS == false
+      # if /provHost/services/clusterDNS == true, cluster (IP) with be located on provHost/interfaces/provisioning
+      # and DNS functionality will be provided by the provisioning host
+      cluster: 192.168.99.11
+      # Up to 3 external DNS servers to which non-local queries will be directed
+      external1: 10.20.7.10
+      external2: 10.20.6.10
+
+  provHost:
+    interfaces:
+      # Interface on the provisioning host that connects to the provisioning network
+      provisioning: ens224
+      # Must be in provisioningIpCidr range
+      # pxe boot server will be at port 8080 on this address
+      provisioningIpAddress: 172.22.0.10
+      # Interface on the provisioning host that connects to the baremetal network
+      baremetal: ens256
+      # Must be in baremetalIpCidr range
+      baremetalIpAddress: 192.168.100.10
+      # Interface on the provisioning host that connects to the internet/external network
+      external: ens192
+    bridges:
+      # These bridges are created on the bastion host
+      provisioning: provisioning
+      baremetal: baremetal
+    services:
+      # Does the provsioning host provide DHCP services for the baremetal network?
+      baremetalDHCP: true
+      # Does the provisioning host provide DNS services for the cluster?
+      clusterDNS: true
+      # Does the provisioning host provide a default gateway for the baremetal network?
+      baremetalGateway: false
