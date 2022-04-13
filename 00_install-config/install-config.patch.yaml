@@ -19,12 +19,6 @@ networking:
   - 172.30.0.0/16
 platform:
    none: []
-   apiVIP: 
-   - 192.1681.11.4
-   ingressVIP: 
-   - 192.168.111.3
-   dnsVIP: 
-   - 192.168.111.2
    hosts: []
 pullSecret: 'PULL_SECRET'
 sshKey: |
