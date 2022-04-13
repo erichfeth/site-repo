@@ -19,7 +19,6 @@ networking:
   - 172.30.0.0/16
 platform:
   baremetal:
-    none: []
     apiVIP: 192.168.111.4
     ingressVIP: 192.168.111.3
     hosts: 
