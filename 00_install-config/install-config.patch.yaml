@@ -22,8 +22,11 @@ platform:
     none: []
     apiVIP: 192.168.111.4
     ingressVIP: 192.168.111.3
-    dnsVIP: 192.168.111.2
-    hosts: []
+    hosts: 
+    - name: openshift-worker-1
+      role: worker
+      bootMACAddress: 00:00:00:00:00:00
+      hardwareProfile: unknown    
 pullSecret: 'PULL_SECRET'
 sshKey: |
    SSH_PUB_KEY
