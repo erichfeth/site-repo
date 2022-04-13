@@ -18,10 +18,12 @@ networking:
   serviceNetwork:
   - 172.30.0.0/16
 platform:
-  baremetal: 
-    apiVIP: 192.1681.11.4
+  baremetal:
+    none: {}
+    apiVIP: 192.168.111.4
     ingressVIP: 192.168.111.3
     dnsVIP: 192.168.111.2
+    hosts: {}
 pullSecret: 'PULL_SECRET'
 sshKey: |
    SSH_PUB_KEY
